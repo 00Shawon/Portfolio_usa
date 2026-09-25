@@ -504,343 +504,524 @@ const Design = () => {
         </div>
       </section>
 
-      {/* ======================================================
-          DETAIL MODAL
-      ======================================================= */}
+     {/* ======================================================
+    DETAIL MODAL
+======================================================= */}
 
-      <AnimatePresence>
-        {selectedDesign && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center"
-            role="dialog"
-            aria-modal="true"
-            aria-label={`${selectedDesign.title} project details`}
-            onClick={closeModal}
+<AnimatePresence>
+  {selectedDesign && (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${selectedDesign.title} project details`}
+      onClick={closeModal}
+    >
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/85 backdrop-blur-md" />
+
+      {/* Modal */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.985, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.985, y: 12 }}
+        transition={{
+          duration: 0.45,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        onClick={(event) => event.stopPropagation()}
+        className="
+          relative flex h-[100dvh] w-full max-w-[1450px]
+          flex-col overflow-hidden
+          bg-[#faf9f7] dark:bg-[#161616]
+          sm:h-[94dvh] sm:border sm:border-white/[0.08]
+          lg:flex-row
+        "
+      >
+        {/* ==================================================
+            MOBILE IMAGE
+        =================================================== */}
+
+        <div className="relative h-[31dvh] min-h-[220px] shrink-0 bg-[#0a0a0a] lg:hidden">
+          <div className="flex h-full w-full items-center justify-center">
+            <img
+              src={selectedDesign.image}
+              alt={selectedDesign.title}
+              className="max-h-full max-w-full object-contain p-4"
+            />
+          </div>
+
+          {/* Image overlay */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/40 to-transparent" />
+
+          {/* Previous */}
+          <button
+            type="button"
+            onClick={prevDesign}
+            aria-label="Previous project"
+            className="
+              absolute left-3 top-1/2
+              flex h-9 w-9 -translate-y-1/2
+              items-center justify-center
+              rounded-full
+              border border-white/15
+              bg-black/30
+              text-white
+              backdrop-blur-md
+              transition-all
+              active:scale-95
+            "
           >
-            {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/85 backdrop-blur-md" />
+            <ChevronLeft size={17} strokeWidth={1.5} />
+          </button>
 
-            {/* Modal */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.985, y: 12 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.985, y: 12 }}
-              transition={{
-                duration: 0.45,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              onClick={(event) => event.stopPropagation()}
-              className="relative flex h-dvh w-full max-w-[1450px] overflow-hidden bg-[#faf9f7] dark:bg-[#161616] sm:h-[94vh] sm:border sm:border-white/[0.08]"
+          {/* Next */}
+          <button
+            type="button"
+            onClick={nextDesign}
+            aria-label="Next project"
+            className="
+              absolute right-3 top-1/2
+              flex h-9 w-9 -translate-y-1/2
+              items-center justify-center
+              rounded-full
+              border border-white/15
+              bg-black/30
+              text-white
+              backdrop-blur-md
+              transition-all
+              active:scale-95
+            "
+          >
+            <ChevronRight size={17} strokeWidth={1.5} />
+          </button>
+
+          {/* Counter */}
+          <div className="absolute bottom-3 left-4 font-mono text-[8px] tracking-[0.14em] text-white/50">
+            {String(selectedDesign.id).padStart(2, "0")} /{" "}
+            {String(designs.length).padStart(2, "0")}
+          </div>
+
+          {/* Close */}
+          <button
+            type="button"
+            onClick={closeModal}
+            aria-label="Close project details"
+            className="
+              absolute right-3 top-3
+              flex h-9 w-9
+              items-center justify-center
+              rounded-full
+              border border-white/15
+              bg-black/30
+              text-white
+              backdrop-blur-md
+              transition-all
+              active:scale-95
+            "
+          >
+            <X size={17} strokeWidth={1.6} />
+          </button>
+        </div>
+
+        {/* ==================================================
+            DESKTOP IMAGE
+        =================================================== */}
+
+        <div className="relative hidden bg-[#0a0a0a] lg:flex lg:h-full lg:w-[56%] lg:shrink-0 lg:items-center lg:justify-center">
+          <img
+            src={selectedDesign.image}
+            alt={selectedDesign.title}
+            className="max-h-full max-w-full object-contain p-10 xl:p-14"
+          />
+
+          {/* Image counter */}
+          <div className="absolute bottom-5 left-6 font-mono text-[9px] tracking-[0.14em] text-white/40">
+            {String(selectedDesign.id).padStart(2, "0")} /{" "}
+            {String(designs.length).padStart(2, "0")}
+          </div>
+
+          {/* Previous */}
+          <button
+            type="button"
+            onClick={prevDesign}
+            aria-label="Previous project"
+            className="
+              absolute left-5 top-1/2
+              flex h-10 w-10 -translate-y-1/2
+              items-center justify-center
+              rounded-full
+              border border-white/15
+              bg-white/[0.06]
+              text-white
+              backdrop-blur-md
+              transition-all duration-300
+              hover:border-white/30
+              hover:bg-white/[0.12]
+            "
+          >
+            <ChevronLeft size={18} strokeWidth={1.5} />
+          </button>
+
+          {/* Next */}
+          <button
+            type="button"
+            onClick={nextDesign}
+            aria-label="Next project"
+            className="
+              absolute right-5 top-1/2
+              flex h-10 w-10 -translate-y-1/2
+              items-center justify-center
+              rounded-full
+              border border-white/15
+              bg-white/[0.06]
+              text-white
+              backdrop-blur-md
+              transition-all duration-300
+              hover:border-white/30
+              hover:bg-white/[0.12]
+            "
+          >
+            <ChevronRight size={18} strokeWidth={1.5} />
+          </button>
+        </div>
+
+        {/* ==================================================
+            DETAILS PANEL
+        =================================================== */}
+
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+          {/* Header */}
+          <div
+            className="
+              flex shrink-0 items-start justify-between
+              border-b border-black/[0.08]
+              bg-[#faf9f7]
+              px-5 py-4
+              dark:border-white/[0.08]
+              dark:bg-[#161616]
+              sm:px-7 sm:py-6
+            "
+          >
+            <div className="min-w-0 pr-4">
+              <SectionLabel>
+                {selectedDesign.category}
+              </SectionLabel>
+
+              <h2
+                className="
+                  mt-1.5
+                  text-lg font-semibold leading-tight
+                  tracking-[-0.035em]
+                  text-charcoal
+                  dark:text-white
+                  sm:text-2xl
+                "
+              >
+                {selectedDesign.title}
+              </h2>
+
+              <p className="mt-1 text-[11px] text-gray-500 dark:text-gray-500">
+                {selectedDesign.clientName}
+              </p>
+            </div>
+
+            {/* Desktop close */}
+            <button
+              type="button"
+              onClick={closeModal}
+              aria-label="Close project details"
+              className="
+                flex h-9 w-9 shrink-0
+                items-center justify-center
+                rounded-full
+                border border-black/10
+                text-gray-500
+                transition-all
+                hover:border-black/20
+                hover:bg-black/[0.04]
+                hover:text-charcoal
+                dark:border-white/10
+                dark:text-gray-400
+                dark:hover:border-white/20
+                dark:hover:bg-white/[0.05]
+                dark:hover:text-white
+              "
             >
-              {/* ==================================================
-                  IMAGE AREA
-              =================================================== */}
+              <X size={17} strokeWidth={1.6} />
+            </button>
+          </div>
 
-              <div className="relative hidden bg-[#0a0a0a] lg:flex lg:w-[56%] lg:items-center lg:justify-center">
-                <img
-                  src={selectedDesign.image}
-                  alt={selectedDesign.title}
-                  className="max-h-full max-w-full object-contain p-10 xl:p-14"
-                />
+          {/* ==================================================
+              SCROLLABLE CONTENT
+          =================================================== */}
 
-                {/* Image counter */}
-                <div className="absolute bottom-5 left-6 font-mono text-[9px] tracking-[0.14em] text-white/40">
-                  {String(selectedDesign.id).padStart(2, "0")} /{" "}
-                  {String(designs.length).padStart(2, "0")}
-                </div>
+          <div
+            className="
+              min-h-0
+              flex-1
+              overflow-y-auto
+              overscroll-contain
+              [-webkit-overflow-scrolling:touch]
+            "
+          >
+            <div className="space-y-7 p-5 sm:space-y-8 sm:p-7">
+              {/* Design Brief */}
+              <div>
+                <DetailHeading icon={Target}>
+                  Design Brief
+                </DetailHeading>
 
-                {/* Previous */}
-                <button
-                  type="button"
-                  onClick={prevDesign}
-                  aria-label="Previous project"
-                  className="absolute left-5 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white backdrop-blur-md transition-all duration-300 hover:border-white/30 hover:bg-white/[0.12]"
-                >
-                  <ChevronLeft size={18} strokeWidth={1.5} />
-                </button>
-
-                {/* Next */}
-                <button
-                  type="button"
-                  onClick={nextDesign}
-                  aria-label="Next project"
-                  className="absolute right-5 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white backdrop-blur-md transition-all duration-300 hover:border-white/30 hover:bg-white/[0.12]"
-                >
-                  <ChevronRight size={18} strokeWidth={1.5} />
-                </button>
+                <p className="max-w-2xl text-[13px] leading-6 text-gray-600 dark:text-gray-400 sm:text-sm sm:leading-7">
+                  {selectedDesign.designBrief}
+                </p>
               </div>
 
-              {/* ==================================================
-                  MOBILE IMAGE
-              =================================================== */}
+              {/* Target Audience */}
+              <div className="border-l border-accent/50 pl-4">
+                <DetailHeading icon={Users}>
+                  Target Audience
+                </DetailHeading>
 
-              <div className="relative h-[39vh] shrink-0 bg-[#0a0a0a] lg:hidden">
-                <div className="flex h-full items-center justify-center">
-                  <img
-                    src={selectedDesign.image}
-                    alt={selectedDesign.title}
-                    className="max-h-full max-w-full object-contain p-5"
-                  />
-                </div>
-
-                <button
-                  type="button"
-                  onClick={prevDesign}
-                  aria-label="Previous project"
-                  className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-white/[0.07] text-white backdrop-blur-md"
-                >
-                  <ChevronLeft size={17} strokeWidth={1.5} />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={nextDesign}
-                  aria-label="Next project"
-                  className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-white/[0.07] text-white backdrop-blur-md"
-                >
-                  <ChevronRight size={17} strokeWidth={1.5} />
-                </button>
-
-                <div className="absolute bottom-3 left-4 font-mono text-[8px] tracking-[0.14em] text-white/45">
-                  {String(selectedDesign.id).padStart(2, "0")} /{" "}
-                  {String(designs.length).padStart(2, "0")}
-                </div>
+                <p className="max-w-2xl text-[13px] leading-6 text-gray-600 dark:text-gray-400 sm:text-sm sm:leading-7">
+                  {selectedDesign.targetAudience}
+                </p>
               </div>
 
-              {/* ==================================================
-                  RIGHT DETAILS
-              =================================================== */}
+              {/* Palette */}
+              <div>
+                <DetailHeading icon={Palette}>
+                  Color Palette
+                </DetailHeading>
 
-              <div className="flex min-h-0 flex-1 flex-col">
-                {/* Header */}
-                <div className="flex shrink-0 items-start justify-between border-b border-black/[0.08] bg-[#faf9f7]/95 px-5 py-5 backdrop-blur-xl dark:border-white/[0.08] dark:bg-[#161616]/95 sm:px-7 sm:py-6">
-                  <div className="min-w-0 pr-5">
-                    <SectionLabel>{selectedDesign.category}</SectionLabel>
+                <div className="space-y-5">
+                  {[
+                    ["Primary", selectedDesign.colorPalette.primary],
+                    ["Secondary", selectedDesign.colorPalette.secondary],
+                    ["Accent", selectedDesign.colorPalette.accent],
+                  ]
+                    .filter(([, colors]) => colors?.length)
+                    .map(([label, colors]) => (
+                      <div key={label}>
+                        <p className="mb-2 text-[9px] font-semibold uppercase tracking-[0.16em] text-gray-400">
+                          {label}
+                        </p>
 
-                    <h2 className="mt-2 max-w-2xl text-xl font-semibold leading-tight tracking-[-0.035em] text-charcoal dark:text-white sm:text-2xl">
-                      {selectedDesign.title}
-                    </h2>
+                        <div className="flex flex-wrap gap-x-4 gap-y-2">
+                          {colors.map((color) => (
+                            <div
+                              key={color}
+                              className="flex items-center gap-2"
+                            >
+                              <span
+                                aria-hidden="true"
+                                className="
+                                  h-7 w-7 shrink-0
+                                  border border-black/10
+                                  dark:border-white/10
+                                "
+                                style={{
+                                  backgroundColor: color,
+                                }}
+                              />
 
-                    <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-500">
-                      {selectedDesign.clientName}
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={closeModal}
-                    aria-label="Close project details"
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-black/10 text-gray-500 transition-all duration-300 hover:border-black/20 hover:bg-black/[0.04] hover:text-charcoal dark:border-white/10 dark:text-gray-400 dark:hover:border-white/20 dark:hover:bg-white/[0.05] dark:hover:text-white"
-                  >
-                    <X size={17} strokeWidth={1.6} />
-                  </button>
-                </div>
-
-                {/* Details scroll */}
-                <div className="min-h-0 flex-1 overflow-y-auto">
-                  <div className="space-y-8 p-5 sm:p-7">
-                    {/* Design Brief */}
-                    <div>
-                      <DetailHeading icon={Target}>
-                        Design Brief
-                      </DetailHeading>
-
-                      <p className="max-w-2xl text-sm leading-7 text-gray-600 dark:text-gray-400">
-                        {selectedDesign.designBrief}
-                      </p>
-                    </div>
-
-                    {/* Target Audience */}
-                    <div className="border-l border-accent/50 pl-4">
-                      <DetailHeading icon={Users}>
-                        Target Audience
-                      </DetailHeading>
-
-                      <p className="max-w-2xl text-sm leading-7 text-gray-600 dark:text-gray-400">
-                        {selectedDesign.targetAudience}
-                      </p>
-                    </div>
-
-                    {/* Palette */}
-                    <div>
-                      <DetailHeading icon={Palette}>
-                        Color Palette
-                      </DetailHeading>
-
-                      <div className="space-y-5">
-                        {[
-                          ["Primary", selectedDesign.colorPalette.primary],
-                          [
-                            "Secondary",
-                            selectedDesign.colorPalette.secondary,
-                          ],
-                          ["Accent", selectedDesign.colorPalette.accent],
-                        ]
-                          .filter(([, colors]) => colors?.length)
-                          .map(([label, colors]) => (
-                            <div key={label}>
-                              <p className="mb-2 text-[9px] font-semibold uppercase tracking-[0.16em] text-gray-400">
-                                {label}
-                              </p>
-
-                              <div className="flex flex-wrap gap-4">
-                                {colors.map((color) => (
-                                  <div
-                                    key={color}
-                                    className="flex items-center gap-2"
-                                  >
-                                    <span
-                                      aria-hidden="true"
-                                      className="h-8 w-8 border border-black/10 dark:border-white/10"
-                                      style={{
-                                        backgroundColor: color,
-                                      }}
-                                    />
-
-                                    <span className="font-mono text-[9px] text-gray-500 dark:text-gray-500">
-                                      {color}
-                                    </span>
-                                  </div>
-                                ))}
-                              </div>
+                              <span className="font-mono text-[9px] text-gray-500 dark:text-gray-500">
+                                {color}
+                              </span>
                             </div>
                           ))}
-                      </div>
-                    </div>
-
-                    {/* Typography */}
-                    <div>
-                      <DetailHeading icon={Type}>
-                        Typography
-                      </DetailHeading>
-
-                      <div className="divide-y divide-black/[0.07] border-y border-black/[0.07] dark:divide-white/[0.07] dark:border-white/[0.07]">
-                        {[
-                          ["Primary", selectedDesign.typography.primary],
-                          ["Secondary", selectedDesign.typography.secondary],
-                          ["Accent", selectedDesign.typography.accent],
-                        ].map(([label, value]) => (
-                          <div
-                            key={label}
-                            className="flex items-center justify-between gap-5 py-3"
-                          >
-                            <span className="text-[9px] font-semibold uppercase tracking-[0.16em] text-gray-400">
-                              {label}
-                            </span>
-
-                            <span className="text-right text-xs font-medium text-charcoal dark:text-gray-200">
-                              {value}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Deliverables */}
-                    <div>
-                      <DetailHeading icon={Package}>
-                        Deliverables
-                      </DetailHeading>
-
-                      <div className="grid gap-x-7 gap-y-2 sm:grid-cols-2">
-                        {selectedDesign.deliverables.map((item) => (
-                          <div
-                            key={item}
-                            className="flex items-start gap-2 text-sm leading-6 text-gray-600 dark:text-gray-400"
-                          >
-                            <span className="mt-[9px] h-1 w-1 shrink-0 rounded-full bg-accent" />
-
-                            <span>{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Tools + timeline */}
-                    <div className="grid grid-cols-2 gap-5 border-t border-black/[0.08] pt-5 dark:border-white/[0.08]">
-                      <div>
-                        <p className="text-[9px] font-semibold uppercase tracking-[0.17em] text-gray-400">
-                          Tools Used
-                        </p>
-
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {selectedDesign.tools.map((tool) => (
-                            <span
-                              key={tool}
-                              className="text-xs font-medium text-charcoal dark:text-gray-200"
-                            >
-                              {tool}
-                            </span>
-                          ))}
                         </div>
                       </div>
+                    ))}
+                </div>
+              </div>
 
-                      <div>
-                        <p className="text-[9px] font-semibold uppercase tracking-[0.17em] text-gray-400">
-                          Timeline
-                        </p>
+              {/* Typography */}
+              <div>
+                <DetailHeading icon={Type}>
+                  Typography
+                </DetailHeading>
 
-                        <div className="mt-2 flex items-center gap-2 text-xs font-medium text-charcoal dark:text-gray-200">
-                          <Calendar
-                            size={13}
-                            strokeWidth={1.5}
-                            className="text-accent"
-                          />
+                <div
+                  className="
+                    divide-y divide-black/[0.07]
+                    border-y border-black/[0.07]
+                    dark:divide-white/[0.07]
+                    dark:border-white/[0.07]
+                  "
+                >
+                  {[
+                    ["Primary", selectedDesign.typography.primary],
+                    ["Secondary", selectedDesign.typography.secondary],
+                    ["Accent", selectedDesign.typography.accent],
+                  ].map(([label, value]) => (
+                    <div
+                      key={label}
+                      className="flex items-center justify-between gap-5 py-3"
+                    >
+                      <span className="text-[9px] font-semibold uppercase tracking-[0.16em] text-gray-400">
+                        {label}
+                      </span>
 
-                          {selectedDesign.projectDuration}
-                        </div>
-                      </div>
+                      <span className="text-right text-[11px] font-medium text-charcoal dark:text-gray-200 sm:text-xs">
+                        {value}
+                      </span>
                     </div>
+                  ))}
+                </div>
+              </div>
 
-                    {/* Closing note */}
-                    <div className="border-t border-black/[0.08] pt-5 dark:border-white/[0.08]">
-                      <div className="flex items-start gap-3">
-                        <div className="mt-1 h-5 w-5 shrink-0 rounded-full border border-accent/40" />
+              {/* Deliverables */}
+              <div>
+                <DetailHeading icon={Package}>
+                  Deliverables
+                </DetailHeading>
 
-                        <p className="text-[11px] leading-5 text-gray-400">
-                          This project demonstrates applied visual
-                          communication, audience awareness, and information
-                          hierarchy across a specific communication context.
-                        </p>
-                      </div>
+                <div className="grid gap-x-7 gap-y-2 sm:grid-cols-2">
+                  {selectedDesign.deliverables.map((item) => (
+                    <div
+                      key={item}
+                      className="
+                        flex items-start gap-2
+                        text-[13px] leading-6
+                        text-gray-600
+                        dark:text-gray-400
+                        sm:text-sm
+                      "
+                    >
+                      <span className="mt-[9px] h-1 w-1 shrink-0 rounded-full bg-accent" />
+                      <span>{item}</span>
                     </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tools + Timeline */}
+              <div
+                className="
+                  grid grid-cols-1 gap-5
+                  border-t border-black/[0.08]
+                  pt-5
+                  dark:border-white/[0.08]
+                  sm:grid-cols-2
+                "
+              >
+                <div>
+                  <p className="text-[9px] font-semibold uppercase tracking-[0.17em] text-gray-400">
+                    Tools Used
+                  </p>
+
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {selectedDesign.tools.map((tool) => (
+                      <span
+                        key={tool}
+                        className="text-xs font-medium text-charcoal dark:text-gray-200"
+                      >
+                        {tool}
+                      </span>
+                    ))}
                   </div>
                 </div>
 
-                {/* Mobile navigation footer */}
-                <div className="flex shrink-0 items-center justify-between border-t border-black/[0.08] bg-[#faf9f7]/95 px-5 py-4 backdrop-blur-xl dark:border-white/[0.08] dark:bg-[#161616]/95 lg:hidden">
-                  <button
-                    type="button"
-                    onClick={prevDesign}
-                    className="inline-flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.17em] text-gray-500 transition-colors hover:text-accent"
-                  >
-                    <ChevronLeft size={14} />
-                    Previous
-                  </button>
+                <div>
+                  <p className="text-[9px] font-semibold uppercase tracking-[0.17em] text-gray-400">
+                    Timeline
+                  </p>
 
-                  <span className="font-mono text-[9px] tracking-[0.14em] text-gray-400">
-                    {String(selectedDesign.id).padStart(2, "0")} /{" "}
-                    {String(designs.length).padStart(2, "0")}
-                  </span>
+                  <div className="mt-2 flex items-center gap-2 text-xs font-medium text-charcoal dark:text-gray-200">
+                    <Calendar
+                      size={13}
+                      strokeWidth={1.5}
+                      className="text-accent"
+                    />
 
-                  <button
-                    type="button"
-                    onClick={nextDesign}
-                    className="inline-flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.17em] text-gray-500 transition-colors hover:text-accent"
-                  >
-                    Next
-                    <ChevronRight size={14} />
-                  </button>
+                    {selectedDesign.projectDuration}
+                  </div>
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+              {/* Closing note */}
+              <div className="border-t border-black/[0.08] pt-5 dark:border-white/[0.08]">
+                <div className="flex items-start gap-3">
+                  <div className="mt-1 h-5 w-5 shrink-0 rounded-full border border-accent/40" />
+
+                  <p className="text-[11px] leading-5 text-gray-400">
+                    This project demonstrates applied visual
+                    communication, audience awareness, and information
+                    hierarchy across a specific communication context.
+                  </p>
+                </div>
+              </div>
+
+              {/* Extra bottom breathing room for mobile */}
+              <div className="h-2 lg:hidden" />
+            </div>
+          </div>
+
+          {/* ==================================================
+              MOBILE NAVIGATION
+          =================================================== */}
+
+          <div
+            className="
+              flex shrink-0 items-center justify-between
+              border-t border-black/[0.08]
+              bg-[#faf9f7]
+              px-5 py-3.5
+              dark:border-white/[0.08]
+              dark:bg-[#161616]
+              lg:hidden
+            "
+          >
+            <button
+              type="button"
+              onClick={prevDesign}
+              className="
+                inline-flex items-center gap-1.5
+                text-[9px] font-semibold uppercase
+                tracking-[0.17em]
+                text-gray-500
+                transition-colors
+                hover:text-accent
+                active:text-accent
+              "
+            >
+              <ChevronLeft size={14} />
+              Previous
+            </button>
+
+            <span className="font-mono text-[9px] tracking-[0.14em] text-gray-400">
+              {String(selectedDesign.id).padStart(2, "0")} /{" "}
+              {String(designs.length).padStart(2, "0")}
+            </span>
+
+            <button
+              type="button"
+              onClick={nextDesign}
+              className="
+                inline-flex items-center gap-1.5
+                text-[9px] font-semibold uppercase
+                tracking-[0.17em]
+                text-gray-500
+                transition-colors
+                hover:text-accent
+                active:text-accent
+              "
+            >
+              Next
+              <ChevronRight size={14} />
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>
+     
     </>
   );
 };
